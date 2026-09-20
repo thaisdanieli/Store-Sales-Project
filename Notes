@@ -1,0 +1,36 @@
+''' 
+O glob serve para procurar arquivos usando padrões.
+glob.glob("C:/Planilhas/*.xlsx")
+glob.glob("Vendas - *.xlsx")
+
+Vendas - → precisa começar exatamente assim
+* → pode ter qualquer coisa depois
+.xlsx → precisa terminar em .xlsx
+
+'''
+
+'''
+os.path.join()
+
+Imagine:
+pasta_arquivos = "C:/Users/Thais/Documentos/Planilhas"
+
+Se fizermos:
+os.path.join(pasta_arquivos, "Vendas - *.xlsx")
+
+ele monta:
+C:/Users/Thais/Documentos/Planilhas/Vendas - *.xlsx
+
+Ou seja, ele está dizendo:
+"Procure pelo padrão Vendas - *.xlsx dentro desta pasta."
+
+'''
+
+# os
+'''
+os é uma biblioteca do Python para trabalhar com recursos do sistema operacional, para 
+trabalhar com caminhos e nomes de arquivos.
+
+'''
+
+'''(Se você quiser ignorar qualquer arquivo dentro da pasta data por completo, basta colocar apenas data/ lá dentro).'''
