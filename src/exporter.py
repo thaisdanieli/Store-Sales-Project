@@ -47,6 +47,13 @@ def exportar_e_formatar_excel(arquivo, data: str, caminho_saida):
     colunas_alvo = ["% META 3D", "% LW 3D"]
     indices_alvo = []
 
+    # Identifica dinamicamente as colunas de valores/anos (ex: '10-2025', '10-2026') 
+    # Qualquer coluna que não seja texto descritivo nem porcentagem (ou que contenha hífens de data)
+    
+
+
+
+
     for col_num, col_name in enumerate(arquivo.columns, start=1):
         if str(col_name).strip() in [c.strip() for c in colunas_alvo]:
             indices_alvo.append(col_num)

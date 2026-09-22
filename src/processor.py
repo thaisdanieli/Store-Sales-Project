@@ -70,7 +70,7 @@ def processar_dados_vendas():
     column1 = tabela_comparativa.columns[1]
 
     # Calcula o crescimento percentual entre 2025 e 2026
-    tabela_comparativa['Crescimento_%'] = (
+    tabela_comparativa['% META 3D'] = (
         (tabela_comparativa[column1] - tabela_comparativa[column0]) / tabela_comparativa[column0]
     ) 
 
