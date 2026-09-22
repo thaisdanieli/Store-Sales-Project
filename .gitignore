@@ -1,2 +1,2 @@
-data/*.xlsx
-data/*.xls
+*.xlsx
+*.xls
