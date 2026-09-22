@@ -10,7 +10,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-def exportar_e_formatar_excel(arquivo, data: str):
+def exportar_e_formatar_excel(arquivo, data: str, caminho_saida):
     wb = Workbook()
     ws = wb.active
     ws.title = "DESEMPENHO LOJAS - DOCKS"
@@ -18,10 +18,9 @@ def exportar_e_formatar_excel(arquivo, data: str):
     # Garante que as linhas de grade apareçam na planilha
     ws.views.sheetView[0].showGridLines = True
 
-    ano = data.split("-")
     # 1. Escreve um cabeçalho superior informativo com a data recebida
-    ws['A1'] = f"ANO: {ano}"
-    ws['A1'].font = Font(name="Calibri",size=14, bold=True, color=1F497D)
+    ws['A1'] = f"ANO: {data[-4:]}"
+    ws['A1'].font = Font(name="Calibri",size=14, bold=True, color="1F497D")
 
     ws['A2'] = f"PERÍODO DE REFERÊNCIA: {data}"
     ws['A2'].font = Font(name="Calibri", size=11, italic=True)
@@ -54,13 +53,13 @@ def exportar_e_formatar_excel(arquivo, data: str):
 
     # Fontes para as cores condicionais
     fonte_azul = Font(name="Calibri", size=11, color="0000FF", bold=True) # Azul para > 0%
-    fonte_vermelho = Font(name="Calibri", size=11, color="")
+    fonte_vermelho = Font(name="Calibri", size=11, color="FF0000", bold=True)
 
     # Percorre as linhas de dados (a partir da linha 5)
-    for row in ws.inter_rows(min_row=5, max_row=ws.max_row, min_col=1, max_col=len(arquivo.columns)):
+    for row in ws.iter_rows(min_row=5, max_row=ws.max_row, min_col=1, max_col=len(arquivo.columns)):
         for cell in row:
             # Aplica fonte padrão para as demais células
-            cell.font = Font(anme="Calibri", size=11)
+            cell.font = Font(name="Calibri", size=11)
 
             # Se a coluna atual estiver na lista de alvos (% META 3D ou % LW 3D)
             if cell.column in indices_alvo:
@@ -77,7 +76,6 @@ def exportar_e_formatar_excel(arquivo, data: str):
         max_len = max(len(str(cell.value or '')) for cell in col)
         col_letter = col[0].column_letter
         ws.column_dimensions[col_letter].width = max(max_len + 4, 12)
-
 
     # Salva o arquivo final
     wb.save(caminho_saida)
