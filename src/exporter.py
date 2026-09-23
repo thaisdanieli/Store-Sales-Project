@@ -29,7 +29,7 @@ def exportar_e_formatar_excel(arquivo, data: str, caminho_saida):
     ws.append([]) # Linha 3 vazia
 
     # Converte o DataFrame do Pandas para linhas e adiciona na planilha
-    for _, row in enumerate(dataframe_to_rows(arquivo, index=False, header=True), start=4):
+    for _, row in enumerate(dataframe_to_rows(arquivo, index=True, header=True), start=4):
         ws.append(row)
 
     # Estilização do cabeçalho da tabela (Linha 4)
@@ -47,16 +47,19 @@ def exportar_e_formatar_excel(arquivo, data: str, caminho_saida):
     colunas_alvo = ["% META 3D", "% LW 3D"]
     indices_alvo = []
 
+    for col_num, col_name in enumerate(arquivo.columns, start=1):
+            if str(col_name).strip() in [c.strip() for c in colunas_alvo]:
+                indices_alvo.append(col_num)
+
+    #Código temporário para teste
+    colunas_moeda = ["10-2025", "10-2026"]
+    indices_moeda = []
+
     # Identifica dinamicamente as colunas de valores/anos (ex: '10-2025', '10-2026') 
     # Qualquer coluna que não seja texto descritivo nem porcentagem (ou que contenha hífens de data)
-    
-
-
-
-
     for col_num, col_name in enumerate(arquivo.columns, start=1):
-        if str(col_name).strip() in [c.strip() for c in colunas_alvo]:
-            indices_alvo.append(col_num)
+        if str(col_name).split() in (c.split() for c in colunas_moeda):
+            indices_moeda.append(col_num)   
 
     # Fontes para as cores condicionais
     fonte_azul = Font(name="Calibri", size=11, color="0000FF", bold=True) # Azul para > 0%
@@ -67,6 +70,11 @@ def exportar_e_formatar_excel(arquivo, data: str, caminho_saida):
         for cell in row:
             # Aplica fonte padrão para as demais células
             cell.font = Font(name="Calibri", size=11)
+
+            # Se a coluna for de valores/moeda
+            if cell.column in indices_moeda:
+                cell.number_format = 'R$ #,##0.00'
+                cell.alignment = Alignment(horizontal="right")
 
             # Se a coluna atual estiver na lista de alvos (% META 3D ou % LW 3D)
             if cell.column in indices_alvo:
