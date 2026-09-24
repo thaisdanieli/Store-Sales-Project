@@ -9,7 +9,7 @@ import os
 import glob
 import pandas as pd 
 
-def processar_dados_vendas():
+def processar_dados_vendas(df_google, df_google_preco):
     # 1. Caminho da pasta onde estão os arquivos Excel
     pasta_arquivos = "data"
 
