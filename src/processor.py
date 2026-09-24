@@ -66,15 +66,20 @@ def processar_dados_vendas():
         aggfunc='sum'       # aggfunc significa função de agregação.
     )
 
-    column0 = tabela_comparativa.columns[0]
+    # 1. Remove o nome "Periodo" que fica flutuando no topo das colunas
+    tabela_comparativa = tabela_comparativa.rename_axis(None, axis=1)
+    # 2. Transforma o índice "Loja" em uma coluna normal do DataFrame
+    tabela_comparativa = tabela_comparativa.reset_index()
+
     column1 = tabela_comparativa.columns[1]
+    column2 = tabela_comparativa.columns[2]
 
     # Calcula o crescimento percentual entre 2025 e 2026
     tabela_comparativa['% META 3D'] = (
-        (tabela_comparativa[column1] - tabela_comparativa[column0]) / tabela_comparativa[column0]
+        (tabela_comparativa[column2] - tabela_comparativa[column1]) / tabela_comparativa[column1]
     ) 
 
-    print(f"\n--- Comparativo {column0} vs {column1} com Crescimento ---")
+    print(f"\n--- Comparativo {column1} vs {column2} com Crescimento ---")
     print(tabela_comparativa)
 
     return tabela_comparativa, periodo

@@ -7,6 +7,7 @@ de salvar na pasta de saída e até o envio por e-mail.
 '''
 import pandas as pd
 from openpyxl import Workbook
+from datetime import datetime
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 
@@ -29,7 +30,7 @@ def exportar_e_formatar_excel(arquivo, data: str, caminho_saida):
     ws.append([]) # Linha 3 vazia
 
     # Converte o DataFrame do Pandas para linhas e adiciona na planilha
-    for _, row in enumerate(dataframe_to_rows(arquivo, index=True, header=True), start=4):
+    for _, row in enumerate(dataframe_to_rows(arquivo, index=False, header=True), start=4):
         ws.append(row)
 
     # Estilização do cabeçalho da tabela (Linha 4)
@@ -52,7 +53,13 @@ def exportar_e_formatar_excel(arquivo, data: str, caminho_saida):
                 indices_alvo.append(col_num)
 
     #Código temporário para teste
-    colunas_moeda = ["10-2025", "10-2026"]
+    data_obj = datetime.strptime(data, "%m-%Y").date()
+    # 2. Subtraindo 1 ano (mantendo o mês e o dia)
+    data_obj = data_obj.replace(year=data_obj.year - 1)
+    # 3. Transformando em string apenas no formato ano-mês (MM-YYYY)
+    data_obj = data_obj.strftime("%m-%Y")
+
+    colunas_moeda = [data_obj, data]
     indices_moeda = []
 
     # Identifica dinamicamente as colunas de valores/anos (ex: '10-2025', '10-2026') 
@@ -79,6 +86,7 @@ def exportar_e_formatar_excel(arquivo, data: str, caminho_saida):
             # Se a coluna atual estiver na lista de alvos (% META 3D ou % LW 3D)
             if cell.column in indices_alvo:
                 cell.number_format = '0.0%'
+                cell.alignment = Alignment(horizontal="center")
 
                 if isinstance(cell.value, (int, float)):
                     if cell.value <0:
